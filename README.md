@@ -1,4 +1,5 @@
 # Migration-Mind
+# New version testing
 
 Migration-Mind is a web application with a frontend and a Java Spring Boot backend. This README explains how to prepare your machine, run the application in development, and build for production.
 
