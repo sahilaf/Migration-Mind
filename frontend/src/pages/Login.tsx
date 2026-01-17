@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { signIn, signInWithGoogle, session, loading } = useAuth();
 
   const [formData, setFormData] = useState({
@@ -14,12 +15,15 @@ export default function Login() {
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
 
-  // If already logged in, send to dashboard
+  // Get redirect path from location state, default to dashboard
+  const redirectTo = (location.state as any)?.redirectTo || '/dashboard';
+
+  // If already logged in, go to the redirect destination
   useEffect(() => {
     if (!loading && session) {
-      navigate("/dashboard", { replace: true });
+      navigate(redirectTo, { replace: true });
     }
-  }, [loading, session, navigate]);
+  }, [loading, session, navigate, redirectTo]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -46,7 +50,7 @@ export default function Login() {
       if (!newSession) {
         setInfo("Check your email to confirm your account before logging in.");
       } else {
-        navigate("/dashboard");
+        navigate(redirectTo);
       }
     } catch (err: any) {
       setError(err.message || "Login failed. Please check your credentials.");
@@ -59,6 +63,10 @@ export default function Login() {
     setSubmitting(true);
     setError("");
     try {
+      // Store redirect path in localStorage for retrieval after OAuth callback
+      if (redirectTo !== '/dashboard') {
+        localStorage.setItem('authRedirectTo', redirectTo);
+      }
       await signInWithGoogle();
     } catch (err: any) {
       setError(err.message || "Google login failed");
