@@ -1,9 +1,27 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Play, Database, Cpu, Shield } from "lucide-react";
+import { ArrowRight, FileText, Database, Cpu, Shield } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import LightRays from "../components/LightRays";
 import Particles from "../components/Particles";
+
 export const HeroSection = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const handleStartMigration = () => {
+    if (user) {
+      navigate('/mongo-analysis');
+    } else {
+      navigate('/signup', { state: { redirectTo: '/mongo-analysis' } });
+    }
+  };
+
+  const handleDocumentation = () => {
+    navigate('/documentation');
+  };
+
   return (
     <section className="relative h-screen pt-16 mb-32">
       <div className="w-screen h-full bg-transparent absolute">
@@ -34,8 +52,8 @@ export const HeroSection = () => {
         />
       </div>
       <div className="pointer-events-none absolute inset-0 gradient-hero" />
-      
-     
+
+
       <div className="container relative mx-auto px-4 py-24 lg:py-32">
         <div className="mx-auto max-w-4xl text-center">
           <motion.div
@@ -54,7 +72,6 @@ export const HeroSection = () => {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="mb-6 text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-5xl lg:text-6xl xl:text-7xl"
           >
-            Hybrid AI + Rule-Based{" "}
             <span className="text-gradient">Database Migration</span>
           </motion.h1>
 
@@ -64,7 +81,7 @@ export const HeroSection = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="mx-auto mb-10 max-w-2xl text-lg text-muted-foreground lg:text-xl"
           >
-            Safely migrate databases using AI-assisted planning, deterministic rules, and multi-threaded execution.
+            Safely migrate databases with intelligent planning and multi-threaded execution.
           </motion.p>
 
           <motion.div
@@ -73,13 +90,13 @@ export const HeroSection = () => {
             transition={{ duration: 0.8, delay: 0.5 }}
             className="flex flex-col items-center justify-center gap-4 sm:flex-row"
           >
-            <Button variant="hero" size="lg" className="group">
+            <Button variant="hero" size="lg" className="group" onClick={handleStartMigration}>
               Start Migration
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
-            <Button variant="hero-outline" size="lg" className="group">
-              <Play className="h-4 w-4" />
-              View Demo
+            <Button variant="hero-outline" size="lg" className="group" onClick={handleDocumentation}>
+              <FileText className="h-4 w-4" />
+              Documentation
             </Button>
           </motion.div>
         </div>
@@ -102,12 +119,12 @@ export const HeroSection = () => {
                 </div>
                 <div className="text-sm text-muted-foreground">Migration Pipeline</div>
               </div>
-              
+
               {/* Migration Flow Visualization */}
               <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 {[
                   { icon: Database, label: "Schema", sublabel: "Import" },
-                  { icon: Cpu, label: "Hybrid Plan", sublabel: "AI + Rules" },
+                  { icon: Cpu, label: "Migration Plan", sublabel: "Generate" },
                   { icon: Shield, label: "User Review", sublabel: "Approve" },
                   { icon: ArrowRight, label: "Migration", sublabel: "Execute" },
                 ].map((step, i) => (

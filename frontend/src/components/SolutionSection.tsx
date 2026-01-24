@@ -4,17 +4,17 @@ import { Sparkles, Shield, UserCheck, ArrowRight } from "lucide-react";
 const steps = [
   {
     icon: Sparkles,
-    label: "AI suggests",
+    label: "Analyze",
     description: "Intelligent analysis of your schema generates optimal migration paths",
   },
   {
     icon: Shield,
-    label: "Rules enforce",
-    description: "Deterministic validation ensures safety and data integrity",
+    label: "Validate",
+    description: "Built-in validation ensures safety and data integrity",
   },
   {
     icon: UserCheck,
-    label: "User approves",
+    label: "Approve",
     description: "You review and approve every change before execution",
   },
 ];
@@ -31,9 +31,9 @@ export const SolutionSection = () => {
             transition={{ duration: 0.6 }}
             className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/60 bg-secondary/50 px-4 py-2"
           >
-            <span className="text-sm text-muted-foreground">The Hybrid Approach</span>
+            <span className="text-sm text-muted-foreground">The Approach</span>
           </motion.div>
-          
+
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -44,7 +44,7 @@ export const SolutionSection = () => {
             The best of{" "}
             <span className="text-gradient">both worlds</span>
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -52,7 +52,7 @@ export const SolutionSection = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-muted-foreground"
           >
-            Combine AI intelligence with rule-based safety for migrations you can trust.
+            Intelligent planning with built-in safety for migrations you can trust.
           </motion.p>
         </div>
 
@@ -65,7 +65,9 @@ export const SolutionSection = () => {
           className="relative mx-auto max-w-4xl"
         >
           <div className="absolute inset-0 rounded-3xl bg-primary/5 blur-2xl" />
-          <div className="relative rounded-2xl border border-border/60 bg-card/80 p-8 backdrop-blur-sm">
+          <div className="relative rounded-2xl border border-border/60 bg-card/80 p-8 backdrop-blur-sm overflow-hidden">
+            <div className="absolute top-0 right-0 -mr-20 -mt-20 h-[300px] w-[300px] rounded-full bg-primary/10 blur-[80px]" />
+            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 h-[300px] w-[300px] rounded-full bg-primary/10 blur-[80px]" />
             <div className="flex flex-col items-center gap-8 lg:flex-row lg:justify-between">
               {steps.map((step, index) => (
                 <div key={step.label} className="flex items-center gap-6">
@@ -82,7 +84,7 @@ export const SolutionSection = () => {
                     <h3 className="mb-2 text-lg font-semibold text-foreground">{step.label}</h3>
                     <p className="max-w-[200px] text-sm text-muted-foreground">{step.description}</p>
                   </motion.div>
-                  
+
                   {index < steps.length - 1 && (
                     <ArrowRight className="hidden h-6 w-6 text-primary/50 lg:block" />
                   )}

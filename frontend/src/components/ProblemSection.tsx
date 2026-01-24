@@ -39,7 +39,7 @@ export const ProblemSection = () => {
             Why database migrations{" "}
             <span className="text-gradient">fail</span>
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -61,14 +61,15 @@ export const ProblemSection = () => {
               transition={{ duration: 0.6, delay: 0.1 * index }}
               className="group relative overflow-hidden rounded-2xl border border-destructive/20 bg-destructive/5 p-6 backdrop-blur-sm transition-all duration-300 hover:border-destructive/40"
             >
+              <div className="absolute -right-20 -top-20 h-[150px] w-[150px] rounded-full bg-destructive/10 blur-[50px] transition-all group-hover:bg-destructive/20" />
               <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-destructive/10">
                 <problem.icon className="h-6 w-6 text-destructive" />
               </div>
-              
+
               <h3 className="mb-2 text-lg font-semibold text-foreground">
                 {problem.title}
               </h3>
-              
+
               <p className="text-sm text-muted-foreground">
                 {problem.description}
               </p>

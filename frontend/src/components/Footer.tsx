@@ -29,9 +29,9 @@ export const Footer = () => {
               </div>
               <span className="text-xl font-bold text-foreground">MigrateDB</span>
             </a>
-            
+
             <p className="mb-6 text-sm text-muted-foreground">
-              Hybrid AI + Rule-Based Database Migration Platform. Safe, efficient, and reliable.
+              Database Migration Platform. Safe, efficient, and reliable.
             </p>
 
             <div className="mb-6">
@@ -103,7 +103,7 @@ export const Footer = () => {
           <p className="text-sm text-muted-foreground">
             © 2024 MigrateDB. All rights reserved.
           </p>
-          
+
           <div className="flex items-center gap-6">
             <a href="#" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
               Privacy
