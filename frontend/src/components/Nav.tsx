@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 const navLinks = [
   { label: "Features", href: "#features" },
   { label: "How It Works", href: "#how-it-works" },
-  { label: "Why Hybrid", href: "#why-hybrid" },
+  { label: "Why Us", href: "#why-us" },
   { label: "Architecture", href: "#architecture" },
   { label: "Security", href: "#security" },
 ];
@@ -27,8 +27,7 @@ export const Navbar = () => {
       className="fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/20 backdrop-blur-xl"
     >
       <nav className="container mx-auto flex h-16 items-center justify-between px-4 lg:px-8">
-        <a href="#" className="flex items-center gap-2">
-          
+        <a href="#" className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
           <span className="text-xl font-bold text-foreground">Migration Mind</span>
         </a>
 
@@ -87,6 +86,16 @@ export const Navbar = () => {
                   >
                     <UserIcon className="h-4 w-4" />
                     Dashboard
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigate('/mongo-analysis');
+                      setShowUserMenu(false);
+                    }}
+                    className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-muted transition-colors"
+                  >
+                    <Database className="h-4 w-4" />
+                    MongoDB Analysis
                   </button>
                   <button
                     onClick={async () => {

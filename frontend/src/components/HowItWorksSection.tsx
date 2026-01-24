@@ -17,8 +17,8 @@ const steps = [
   {
     number: "03",
     icon: Cpu,
-    title: "Generate hybrid migration plan",
-    description: "AI generates an optimized plan while deterministic rules validate every operation.",
+    title: "Generate migration plan",
+    description: "Intelligent planning generates an optimized migration strategy with built-in validation.",
   },
   {
     number: "04",
@@ -54,7 +54,7 @@ export const HowItWorksSection = () => {
           >
             <span className="text-sm text-muted-foreground">Step by Step</span>
           </motion.div>
-          
+
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -65,7 +65,7 @@ export const HowItWorksSection = () => {
             How it{" "}
             <span className="text-gradient">works</span>
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -87,19 +87,20 @@ export const HowItWorksSection = () => {
               transition={{ duration: 0.6, delay: 0.1 * index }}
               className="group relative overflow-hidden rounded-2xl border border-border/50 bg-card/50 p-6 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:bg-card/80 hover-lift"
             >
+              <div className="absolute -right-16 -top-16 h-[150px] w-[150px] rounded-full bg-primary/10 blur-[50px] transition-all group-hover:bg-primary/20" />
               <div className="absolute right-4 top-4 text-5xl font-bold text-muted/20">
                 {step.number}
               </div>
-              
+
               <div className="relative">
                 <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-border/60 bg-secondary/50 transition-colors group-hover:border-primary/30 group-hover:bg-primary/10">
                   <step.icon className="h-5 w-5 text-foreground group-hover:text-primary" />
                 </div>
-                
+
                 <h3 className="mb-2 text-lg font-semibold text-foreground">
                   {step.title}
                 </h3>
-                
+
                 <p className="text-sm text-muted-foreground">
                   {step.description}
                 </p>

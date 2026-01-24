@@ -9,8 +9,8 @@ const features = [
   },
   {
     icon: Cpu,
-    title: "Hybrid AI + Rule Engine",
-    description: "AI suggests optimal migration paths while deterministic rules ensure safety and consistency.",
+    title: "Migration Engine",
+    description: "Intelligent migration planning with built-in safety checks to ensure consistency and reliability.",
   },
   {
     icon: Zap,
@@ -43,7 +43,7 @@ export const FeaturesSection = () => {
           >
             <span className="text-sm text-muted-foreground">MVP Features</span>
           </motion.div>
-          
+
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -54,7 +54,7 @@ export const FeaturesSection = () => {
             Key{" "}
             <span className="text-gradient">Features</span>
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -74,21 +74,21 @@ export const FeaturesSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 * index }}
-              className={`group relative overflow-hidden rounded-2xl border border-border/50 bg-card/50 p-8 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:bg-card/80 hover-lift ${
-                index === 4 ? "md:col-span-2 lg:col-span-1" : ""
-              }`}
+              className={`group relative overflow-hidden rounded-2xl border border-border/50 bg-card/50 p-8 backdrop-blur-sm transition-all duration-300 hover:border-primary/30 hover:bg-card/80 hover-lift ${index === 4 ? "md:col-span-2 lg:col-span-1" : ""
+                }`}
             >
-              <div className="absolute inset-0 bg-linear-to-b from-primary/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-              
+              <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+              <div className="absolute -right-20 -top-20 h-[200px] w-[200px] rounded-full bg-primary/20 blur-[60px] transition-all group-hover:bg-primary/30" />
+
               <div className="relative">
                 <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-xl border border-border/60 bg-secondary/50 transition-colors group-hover:border-primary/30 group-hover:bg-primary/10">
                   <feature.icon className="h-6 w-6 text-foreground group-hover:text-primary" />
                 </div>
-                
+
                 <h3 className="mb-3 text-xl font-semibold text-foreground">
                   {feature.title}
                 </h3>
-                
+
                 <p className="text-muted-foreground">
                   {feature.description}
                 </p>

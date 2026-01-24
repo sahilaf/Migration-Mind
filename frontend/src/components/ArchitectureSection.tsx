@@ -14,7 +14,7 @@ export const ArchitectureSection = () => {
           >
             <span className="text-sm text-muted-foreground">Technical Overview</span>
           </motion.div>
-          
+
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -25,7 +25,7 @@ export const ArchitectureSection = () => {
             System{" "}
             <span className="text-gradient">Architecture</span>
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -46,6 +46,8 @@ export const ArchitectureSection = () => {
         >
           <div className="absolute -inset-4 rounded-3xl bg-primary/5 blur-2xl" />
           <div className="relative overflow-hidden rounded-2xl border border-border/60 bg-card/80 p-8 backdrop-blur-sm">
+            <div className="absolute top-0 right-0 -mr-20 -mt-20 h-[250px] w-[250px] rounded-full bg-primary/10 blur-[80px]" />
+            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 h-[250px] w-[250px] rounded-full bg-primary/10 blur-[80px]" />
             {/* Architecture Diagram */}
             <div className="grid gap-8 lg:grid-cols-3">
               {/* Frontend Layer */}
