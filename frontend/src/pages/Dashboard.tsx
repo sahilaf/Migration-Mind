@@ -12,18 +12,16 @@ import {
   CheckCircle,
   Settings,
   LogOut,
-  Menu,
-  X,
   BarChart3,
   Zap,
   AlertCircle,
   Eye,
   FileText,
-  ChevronRight,
   Activity,
   Sliders,
   Home as HomeIcon,
-  History,
+  Menu,
+  X,
 } from 'lucide-react';
 
 // Types
@@ -44,8 +42,9 @@ interface MigrationStep {
 export default function Dashboard() {
   const navigate = useNavigate();
   const { user, session, loading, signOut } = useAuth();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // State for migrations from backend
   const [migrations, setMigrations] = useState<any[]>([]);
@@ -89,10 +88,7 @@ export default function Dashboard() {
     }
   }, [user]);
 
-  const handleLogout = async () => {
-    await signOut();
-    navigate('/login');
-  };
+
 
   // Function to refresh migrations list
   const refreshMigrations = async () => {
@@ -253,139 +249,185 @@ export default function Dashboard() {
       </div>
 
       {/* --- TOP NAVIGATION (Fixed) --- */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a]/90 backdrop-blur-xl border-b border-white/5 shadow-2xl h-16">
-        <div className="px-4 sm:px-6 lg:px-8 h-full flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 hover:bg-white/5 rounded-lg transition-colors md:hidden text-slate-400 hover:text-white"
-            >
-              {sidebarOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-            <div
-              className="flex items-center gap-2 cursor-pointer"
-              onClick={() => window.location.href = '/'}
-            >
-              <h1 className="text-2xl font-bold text-white hover:opacity-80 transition">
-                Migration Mind
-              </h1>
-            </div>
-          </div>
-
-          <div className="hidden md:flex items-center justify-center flex-1 gap-8">
-
-            <nav className="flex gap-6">
-              {[
-                { icon: <HomeIcon className="h-4 w-4" />, label: 'Dashboard' },
-                { icon: <Activity className="h-4 w-4" />, label: 'Migrations' },
-                { icon: <History className="h-4 w-4" />, label: 'History' },
-                { icon: <Settings className="h-4 w-4" />, label: 'Settings' },
-              ].map((item) => (
-                <button
-                  key={item.label}
-                  onClick={() => item.label === 'Settings' && setShowSettings(true)}
-                  className="flex items-center gap-2 text-sm text-slate-400 hover:text-orange-500 transition-colors"
-                >
-                  {item.icon}
-                  {item.label}
-                </button>
-              ))}
-            </nav>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-3 px-4 py-2 bg-white/5 rounded-lg border border-white/5">
-              <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
-              <span className="text-xs text-slate-400">{user?.email || 'admin@darken.io'}</span>
-            </div>
-            <button
-              onClick={handleLogout}
-              className="p-2 hover:bg-white/5 rounded-lg transition-colors"
-              title="Logout"
-            >
-              <LogOut className="h-5 w-5 text-slate-400 hover:text-white" />
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      {/* --- SIDEBAR - DESKTOP (Fixed Layout) --- */}
-      {/* Fixed position, sitting below the nav (top-16), full height to bottom, fixed width */}
-      <aside className="hidden md:block fixed left-0 top-16 bottom-0 w-72 bg-[#0a0a0a] border-r border-white/5 z-40 overflow-y-auto custom-scrollbar">
-        <div className="p-6">
-          <div className="space-y-8">
-            <div>
-              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">
-                Quick Actions
-              </h3>
-              <div className="space-y-2">
-                {['Start New Migration', 'View Templates', 'Recent Jobs'].map((action) => (
-                  <button
-                    key={action}
-                    className="w-full text-left px-4 py-3 rounded-lg hover:bg-white/5 transition-colors text-sm text-slate-400 hover:text-orange-400 border border-transparent hover:border-white/5"
-                  >
-                    {action}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="border-t border-white/5 pt-6">
-              <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">
-                Recent Migrations
-              </h3>
-              <div className="space-y-2">
-                {['E-commerce DB', 'Analytics Migration', 'User Management'].map((item) => (
-                  <button
-                    key={item}
-                    className="w-full text-left px-4 py-3 rounded-lg hover:bg-white/5 transition-colors text-sm text-slate-400 hover:text-white flex items-center justify-between group"
-                  >
-                    {item}
-                    <ChevronRight className="h-4 w-4 opacity-30 group-hover:opacity-100 transition-opacity" />
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      {/* --- SIDEBAR - MOBILE (Overlay) --- */}
-      <motion.div
-        initial={{ x: -280 }}
-        animate={{ x: sidebarOpen ? 0 : -280 }}
-        transition={{ type: 'spring', stiffness: 400, damping: 40 }}
-        className="fixed left-0 top-16 bottom-0 w-72 bg-[#0a0a0a] border-r border-white/5 p-6 overflow-y-auto z-40 md:hidden"
-        onClick={(e) => {
-          if ((e.target as HTMLElement).closest('button')) {
-            setSidebarOpen(false);
-          }
-        }}
+      <motion.header
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl"
       >
-        <div className="space-y-6">
-          <div>
-            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">
-              Quick Actions
-            </h3>
-            <div className="space-y-2">
-              {['Start New Migration', 'View Templates', 'Recent Jobs'].map((action) => (
-                <button
-                  key={action}
-                  className="w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 transition-colors text-sm text-slate-400 hover:text-orange-400"
-                >
-                  {action}
-                </button>
-              ))}
-            </div>
+        <nav className="container mx-auto flex h-16 items-center justify-between px-4 lg:px-8">
+          {/* Logo */}
+          <a href="/" className="flex items-center gap-2 cursor-pointer">
+            <span className="text-xl font-bold text-white">Migration Mind</span>
+          </a>
+
+          {/* Desktop Navigation Links */}
+          <div className="hidden items-center gap-8 lg:flex">
+            <button
+              onClick={() => navigate('/dashboard')}
+              className="text-sm text-slate-300 transition-colors hover:text-orange-500"
+            >
+              Dashboard
+            </button>
+            <button
+              onClick={() => navigate('/mongo-analysis')}
+              className="text-sm text-slate-300 transition-colors hover:text-orange-500"
+            >
+              MongoDB Analysis
+            </button>
+            <button
+              onClick={() => setShowSettings(true)}
+              className="text-sm text-slate-300 transition-colors hover:text-orange-500"
+            >
+              Settings
+            </button>
           </div>
-          {/* Mobile Sidebar Content continues... */}
-        </div>
-      </motion.div>
+
+          {/* Desktop User Menu */}
+          <div className="hidden items-center gap-4 lg:flex">
+            {loading ? (
+              <div className="h-8 w-8 animate-pulse rounded-full bg-white/10" />
+            ) : user ? (
+              <div className="relative">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-orange-600 to-red-600 text-white font-medium hover:opacity-90 transition-opacity"
+                >
+                  <span className="text-sm">
+                    {user.email?.charAt(0).toUpperCase()}
+                  </span>
+                </button>
+                {showUserMenu && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute right-0 mt-2 w-48 rounded-lg border border-white/10 bg-[#0a0a0a] shadow-lg"
+                  >
+                    <div className="p-3 border-b border-white/10">
+                      <p className="text-sm font-medium truncate text-white">{user.email}</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        navigate('/dashboard');
+                        setShowUserMenu(false);
+                      }}
+                      className="flex w-full items-center gap-2 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 transition-colors"
+                    >
+                      <HomeIcon className="h-4 w-4" />
+                      Dashboard
+                    </button>
+                    <button
+                      onClick={() => {
+                        navigate('/mongo-analysis');
+                        setShowUserMenu(false);
+                      }}
+                      className="flex w-full items-center gap-2 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 transition-colors"
+                    >
+                      <Database className="h-4 w-4" />
+                      MongoDB Analysis
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowSettings(true);
+                        setShowUserMenu(false);
+                      }}
+                      className="flex w-full items-center gap-2 px-3 py-2 text-sm text-slate-300 hover:bg-white/5 transition-colors"
+                    >
+                      <Settings className="h-4 w-4" />
+                      Settings
+                    </button>
+                    <button
+                      onClick={async () => {
+                        await signOut();
+                        setShowUserMenu(false);
+                        navigate('/');
+                      }}
+                      className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-400 hover:bg-white/5 transition-colors border-t border-white/10"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Sign Out
+                    </button>
+                  </motion.div>
+                )}
+              </div>
+            ) : null}
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="rounded-lg p-2 text-white lg:hidden"
+          >
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </nav>
+
+        {/* Mobile Menu */}
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="border-t border-white/5 bg-[#0a0a0a]/95 backdrop-blur-xl lg:hidden"
+          >
+            <div className="container mx-auto flex flex-col gap-4 px-4 py-6">
+              <button
+                onClick={() => {
+                  navigate('/dashboard');
+                  setMobileMenuOpen(false);
+                }}
+                className="text-left text-sm text-slate-300 transition-colors hover:text-orange-500"
+              >
+                Dashboard
+              </button>
+              <button
+                onClick={() => {
+                  navigate('/mongo-analysis');
+                  setMobileMenuOpen(false);
+                }}
+                className="text-left text-sm text-slate-300 transition-colors hover:text-orange-500"
+              >
+                MongoDB Analysis
+              </button>
+              <button
+                onClick={() => {
+                  setShowSettings(true);
+                  setMobileMenuOpen(false);
+                }}
+                className="text-left text-sm text-slate-300 transition-colors hover:text-orange-500"
+              >
+                Settings
+              </button>
+              {user && (
+                <>
+                  <div className="border-t border-white/10 pt-4 mt-2">
+                    <p className="text-xs text-slate-500 mb-2">Signed in as</p>
+                    <p className="text-sm text-white truncate">{user.email}</p>
+                  </div>
+                  <button
+                    onClick={async () => {
+                      await signOut();
+                      setMobileMenuOpen(false);
+                      navigate('/');
+                    }}
+                    className="flex items-center gap-2 text-left text-sm text-red-400 transition-colors hover:text-red-300"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Sign Out
+                  </button>
+                </>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </motion.header>
 
 
-      {/* --- MAIN CONTENT (Adjusted for Layout) --- */}
-      {/* md:ml-72 adds the margin to offset the fixed sidebar */}
-      <main className="pt-24 pb-8 md:ml-72 relative z-10 min-h-screen transition-all duration-300">
+
+
+      {/* --- MAIN CONTENT --- */}
+      <main className="pt-24 pb-8 relative z-10 min-h-screen transition-all duration-300">
         <motion.div
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
           variants={containerVariants}
@@ -408,9 +450,6 @@ export default function Dashboard() {
                 <button className="px-6 py-3 bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-lg hover:shadow-[0_0_20px_rgba(234,88,12,0.4)] font-bold transition-all transform hover:scale-105">
                   Start New Migration
                 </button>
-                <button className="px-6 py-3 border border-white/10 text-slate-300 rounded-lg hover:bg-white/5 font-semibold transition-all backdrop-blur-sm">
-                  Load Template
-                </button>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-slate-500">
@@ -420,56 +459,6 @@ export default function Dashboard() {
               </div>
             </div>
           </motion.div>
-
-          {/* Quick Stats Cards */}
-          <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            {metrics.map((metric, idx) => (
-              <motion.div
-                key={idx}
-                whileHover={{ y: -4 }}
-                className="bg-[#0a0a0a] backdrop-blur-md rounded-xl border border-white/5 p-6 hover:border-orange-500/30 transition-all group shadow-lg"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="p-2 rounded-lg bg-orange-500/10 text-orange-500 group-hover:bg-orange-500/20 transition-colors">
-                    {metric.icon}
-                  </div>
-                  {metric.trend && <span className="text-xs text-green-400 bg-green-900/20 px-2 py-0.5 rounded border border-green-900/30">{metric.trend}</span>}
-                </div>
-                <div className="text-3xl font-bold mb-1 text-white">{metric.value}</div>
-                <div className="text-sm text-slate-500">{metric.label}</div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-
-          {/* Migration Workflow Steps */}
-          <motion.div variants={itemVariants} className="mb-8 bg-[#0a0a0a] backdrop-blur-md rounded-xl border border-white/5 p-6">
-            <h3 className="text-lg font-bold mb-6 text-white">Migration Workflow</h3>
-            <div className="flex justify-between items-center relative">
-              {/* Line connecting steps */}
-              <div className="absolute top-6 left-0 right-0 h-0.5 bg-white/5 -z-0"></div>
-
-              {steps.map((step) => (
-                <div key={step.id} className="flex-1 flex flex-col items-center relative z-10">
-                  <div
-                    className={`h-12 w-12 rounded-full flex items-center justify-center font-bold mb-2 transition-all ${step.status === 'complete'
-                      ? 'bg-[#0a0a0a] text-green-500 border border-green-500 shadow-[0_0_10px_rgba(34,197,94,0.3)]'
-                      : step.status === 'current'
-                        ? 'bg-orange-600 text-white border border-orange-500 shadow-[0_0_15px_rgba(234,88,12,0.5)]'
-                        : 'bg-[#111] text-slate-600 border border-white/10'
-                      }`}
-                  >
-                    {step.status === 'current' && <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity }}>{step.icon}</motion.div>}
-                    {step.status !== 'current' && step.icon}
-                  </div>
-                  <span className={`text-xs font-medium uppercase tracking-wider ${step.status === 'current' ? 'text-orange-500' : 'text-slate-500'}`}>
-                    {step.name}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
           {/* Recent Migrations Table */}
           <motion.div variants={itemVariants} className="mb-8 bg-[#0a0a0a] backdrop-blur-md rounded-xl border border-white/5 overflow-hidden">
             <div className="p-6 border-b border-white/5 flex justify-between items-center">
@@ -665,6 +654,56 @@ export default function Dashboard() {
               )}
             </div>
           </motion.div>
+          {/* Quick Stats Cards */}
+          <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            {metrics.map((metric, idx) => (
+              <motion.div
+                key={idx}
+                whileHover={{ y: -4 }}
+                className="bg-[#0a0a0a] backdrop-blur-md rounded-xl border border-white/5 p-6 hover:border-orange-500/30 transition-all group shadow-lg"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="p-2 rounded-lg bg-orange-500/10 text-orange-500 group-hover:bg-orange-500/20 transition-colors">
+                    {metric.icon}
+                  </div>
+                  {metric.trend && <span className="text-xs text-green-400 bg-green-900/20 px-2 py-0.5 rounded border border-green-900/30">{metric.trend}</span>}
+                </div>
+                <div className="text-3xl font-bold mb-1 text-white">{metric.value}</div>
+                <div className="text-sm text-slate-500">{metric.label}</div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+
+          {/* Migration Workflow Steps */}
+          <motion.div variants={itemVariants} className="mb-8 bg-[#0a0a0a] backdrop-blur-md rounded-xl border border-white/5 p-6">
+            <h3 className="text-lg font-bold mb-6 text-white">Migration Workflow</h3>
+            <div className="flex justify-between items-center relative">
+              {/* Line connecting steps */}
+              <div className="absolute top-6 left-0 right-0 h-0.5 bg-white/5 -z-0"></div>
+
+              {steps.map((step) => (
+                <div key={step.id} className="flex-1 flex flex-col items-center relative z-10">
+                  <div
+                    className={`h-12 w-12 rounded-full flex items-center justify-center font-bold mb-2 transition-all ${step.status === 'complete'
+                      ? 'bg-[#0a0a0a] text-green-500 border border-green-500 shadow-[0_0_10px_rgba(34,197,94,0.3)]'
+                      : step.status === 'current'
+                        ? 'bg-orange-600 text-white border border-orange-500 shadow-[0_0_15px_rgba(234,88,12,0.5)]'
+                        : 'bg-[#111] text-slate-600 border border-white/10'
+                      }`}
+                  >
+                    {step.status === 'current' && <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity }}>{step.icon}</motion.div>}
+                    {step.status !== 'current' && step.icon}
+                  </div>
+                  <span className={`text-xs font-medium uppercase tracking-wider ${step.status === 'current' ? 'text-orange-500' : 'text-slate-500'}`}>
+                    {step.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+
 
 
           {/* System Health Indicator */}
@@ -703,13 +742,7 @@ export default function Dashboard() {
         </motion.div>
       </main>
 
-      {/* Responsive mobile sidebar overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 md:hidden"
-          onClick={() => setSidebarOpen(false)}
-        ></div>
-      )}
+
     </div>
   );
 }

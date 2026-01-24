@@ -99,7 +99,7 @@ public class StructuralAnalyzerService {
             case "date":
                 return "TIMESTAMP";
             case "objectId":
-                return "VARCHAR(24)"; // ObjectId as hex string
+                return "TEXT"; // ObjectId as hex string (changed from VARCHAR(24) to avoid length issues)
             case "array":
                 return "JSONB"; // Store arrays as JSON
             case "object":

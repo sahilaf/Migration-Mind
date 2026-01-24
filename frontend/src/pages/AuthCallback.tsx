@@ -8,10 +8,15 @@ export default function AuthCallback() {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
+        // Get redirect path from localStorage (set during OAuth initiation)
+        const redirectTo = localStorage.getItem('authRedirectTo') || '/dashboard';
+
         // If we already have a session (e.g., returning user), skip exchange
         const existing = await supabase.auth.getSession();
         if (existing.data.session) {
-          navigate('/dashboard', { replace: true });
+          // Clear the stored redirect path
+          localStorage.removeItem('authRedirectTo');
+          navigate(redirectTo, { replace: true });
           return;
         }
 
@@ -21,11 +26,13 @@ export default function AuthCallback() {
 
         if (errorDescription) {
           console.error('Auth error:', errorDescription);
+          localStorage.removeItem('authRedirectTo');
           navigate('/login', { replace: true });
           return;
         }
 
         if (!code) {
+          localStorage.removeItem('authRedirectTo');
           navigate('/login', { replace: true });
           return;
         }
@@ -34,17 +41,22 @@ export default function AuthCallback() {
         const { data, error } = await supabase.auth.exchangeCodeForSession(code);
         if (error) {
           console.error('Session exchange failed:', error);
+          localStorage.removeItem('authRedirectTo');
           navigate('/login', { replace: true });
           return;
         }
 
         if (data.session) {
-          navigate('/dashboard', { replace: true });
+          // Clear the stored redirect path
+          localStorage.removeItem('authRedirectTo');
+          navigate(redirectTo, { replace: true });
         } else {
+          localStorage.removeItem('authRedirectTo');
           navigate('/login', { replace: true });
         }
       } catch (error) {
         console.error('Callback error:', error);
+        localStorage.removeItem('authRedirectTo');
         navigate('/login', { replace: true });
       }
     };
