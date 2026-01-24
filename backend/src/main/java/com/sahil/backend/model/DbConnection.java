@@ -29,6 +29,18 @@ public class DbConnection {
     @Column(name = "database_name")
     private String databaseName;
 
+    @Column(name = "connection_string")
+    private String connectionString; // For MongoDB URI format
+
+    @Column(name = "auth_database")
+    private String authDatabase; // For MongoDB authentication
+
+    @Column
+    private String username;
+
+    @Column
+    private String password;
+
     @Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
 
@@ -107,5 +119,37 @@ public class DbConnection {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getConnectionString() {
+        return connectionString;
+    }
+
+    public void setConnectionString(String connectionString) {
+        this.connectionString = connectionString;
+    }
+
+    public String getAuthDatabase() {
+        return authDatabase;
+    }
+
+    public void setAuthDatabase(String authDatabase) {
+        this.authDatabase = authDatabase;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
